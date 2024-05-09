@@ -2,11 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { CardContent, Card } from "@/components/ui/card";
 import React, { useState } from "react";
+import styles from "./dating-assistant.module.css";
 
 export function DatingAssistantV() {
   const [file, setFile] = useState(null);
   const [replies, setReplies] = useState([]);
   const [error, setError] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const MAX_FILE_SIZE_MB = 3;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -19,6 +21,7 @@ export function DatingAssistantV() {
       if (selectedFile.size <= MAX_FILE_SIZE_BYTES) {
         setFile(selectedFile);
         setError(null); // Clear any previous errors
+        setImageUrl(URL.createObjectURL(selectedFile)); // Create a URL for the preview
       } else {
         setFile(null);
         setError(
@@ -69,7 +72,7 @@ export function DatingAssistantV() {
     reader.readAsArrayBuffer(file);
   };
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex h-screen items-center justify-center overflow-auto">
       <div className="w-full max-w-2xl space-y-12">
         <div className="space-y-6 text-center">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-[#9333EA] to-[#7C3AED] bg-clip-text text-transparent md:text-5xl">
@@ -81,7 +84,14 @@ export function DatingAssistantV() {
           </p>
         </div>
         <div className="space-y-6">
-          <div className="group relative flex h-56 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-[#9333EA] bg-gradient-to-r from-[#F3E8FF] to-[#E5E7EB] transition-colors hover:border-[#7C3AED] dark:border-[#6B7280] dark:bg-gradient-to-r dark:from-[#1F2937] dark:to-[#374151]">
+          <div className="group relative flex h-96 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-[#9333EA] bg-gradient-to-r from-[#F3E8FF] to-[#E5E7EB] transition-colors hover:border-[#7C3AED] dark:border-[#6B7280] dark:bg-gradient-to-r dark:from-[#1F2937] dark:to-[#374151]">
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Preview"
+                className={`${styles.imagePreview} rounded-xl`}
+              />
+            )}
             <ImageIcon className="h-14 w-14 text-[#9333EA] group-hover:text-[#7C3AED] dark:text-[#D1D5DB] dark:group-hover:text-[#E5E7EB]" />
             <input
               className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
@@ -98,19 +108,22 @@ export function DatingAssistantV() {
           </Button>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {replies.map((reply, index) => (
-          <Card className="rounded-lg bg-gradient-to-r from-[#F3E8FF] to-[#E5E7EB] p-6 shadow-lg dark:bg-gradient-to-r dark:from-[#1F2937] dark:to-[#374151] dark:shadow-none">
-            <CardContent className="space-y-3 flex items-center justify-between">
-              <p className="text-base font-medium text-[#4B5563] dark:text-[#E5E7EB]">
-                {reply}
-              </p>
-              <Button size="icon" variant="ghost">
-                <CopyIcon className="h-5 w-5 text-[#9333EA] dark:text-[#E5E7EB]" />
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+          {replies.map((reply, index) => (
+            <Card
+              key={index}
+              className="rounded-lg bg-gradient-to-r from-[#F3E8FF] to-[#E5E7EB] p-6 shadow-lg dark:bg-gradient-to-r dark:from-[#1F2937] dark:to-[#374151] dark:shadow-none"
+            >
+              <CardContent className="space-y-3 flex items-center justify-between">
+                <p className="text-base font-medium text-[#4B5563] dark:text-[#E5E7EB]">
+                  {reply}
+                </p>
+                <Button size="icon" variant="ghost">
+                  <CopyIcon className="h-5 w-5 text-[#9333EA] dark:text-[#E5E7EB]" />
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
