@@ -72,10 +72,10 @@ export function DatingAssistantV() {
     reader.readAsArrayBuffer(file);
   };
   return (
-    <div className="flex h-screen items-center justify-center overflow-auto">
+    <div className="flex my-10 items-center justify-center overflow-auto">
       <div className="w-full max-w-2xl space-y-12">
         <div className="space-y-6 text-center">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#9333EA] to-[#7C3AED] bg-clip-text text-transparent md:text-5xl">
+          <h1 className="text-custom-purple text-4xl font-bold bg-gradient-to-r from-[#9333EA] to-[#7C3AED] bg-clip-text md:text-5xl">
             Dating Assistant
           </h1>
           <p className="text-[#4B5563] text-lg dark:text-[#D1D5DB]">
