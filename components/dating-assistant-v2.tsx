@@ -9,6 +9,7 @@ export function DatingAssistantV() {
   const [replies, setReplies] = useState([]);
   const [error, setError] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [generating, setGenerating] = useState(false);
 
   const MAX_FILE_SIZE_MB = 3;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -50,6 +51,7 @@ export function DatingAssistantV() {
       return;
     }
 
+    setGenerating(true);
     const reader = new FileReader();
     reader.onload = async (e) => {
       const binaryData = e.target.result;
@@ -67,6 +69,8 @@ export function DatingAssistantV() {
       } catch (error) {
         console.error("Error generating replies:", error);
         alert("Failed to generate replies. Please try again.");
+      } finally {
+        setGenerating(false);
       }
     };
     reader.readAsArrayBuffer(file);
@@ -98,13 +102,15 @@ export function DatingAssistantV() {
               type="file"
               accept="image/*" // Only accept image file types
               onChange={handleFileChange}
+              disabled={generating}
             />
           </div>
           <Button
             className="w-full rounded-lg bg-gradient-to-r from-[#9333EA] to-[#7C3AED] py-3 text-lg font-medium text-white hover:from-[#7C3AED] hover:to-[#9333EA] dark:bg-gradient-to-r dark:from-[#F3E8FF] dark:to-[#E5E7EB] dark:text-[#1F2937] dark:hover:from-[#E5E7EB] dark:hover:to-[#F3E8FF]"
             onClick={generateReplies}
+            disabled={generating}
           >
-            Generate Replies
+            {generating ? "Generating..." : "Generate Replies"}
           </Button>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
